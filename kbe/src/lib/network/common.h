@@ -8,10 +8,11 @@
 #include "helper/debug_option.h"
 
 namespace KBEngine { 
+
 namespace Network
 {
 const uint32 BROADCAST = 0xFFFFFFFF;
-const uint32 LOCALHOST = 0x0100007F;
+const uint32 LOCALHOST = 0x0100007F;		// 127.0.0.1，注意字节序
 
 // 消息的ID
 typedef uint16	MessageID;

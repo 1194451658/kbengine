@@ -9,6 +9,7 @@
 
 namespace KBEngine { 
 
+// Q: OpenSSLœ‡πÿ
 
 class KBEBlowfish
 {

@@ -72,17 +72,22 @@ class Bundle : public PoolObject
 public:
 	typedef KBEShared_ptr< SmartPoolObject< Bundle > > SmartPoolObjectPtr;
 	static SmartPoolObjectPtr createSmartPoolObj(const std::string& logPoint);
+
 	static ObjectPool<Bundle>& ObjPool();
+
 	static Bundle* createPoolObject(const std::string& logPoint);
 	static void reclaimPoolObject(Bundle* obj);
 	static void destroyObjPool();
+
 	virtual void onReclaimObject();
 	virtual size_t getPoolObjectBytes();
 
 	typedef std::vector<Packet*> Packets;
 	
 	Bundle(Channel * pChannel = NULL, ProtocolType pt = PROTOCOL_TCP);
+
 	Bundle(const Bundle& bundle);
+
 	virtual ~Bundle();
 	
 	void newMessage(const MessageHandler& msgHandler);

@@ -31,21 +31,32 @@ public:
 		return bytes;
 	}
 
+	// 构造函数
+
 	Address();
 	Address(uint32 ipArg, uint16 portArg);
+
+	// 字符串ip地址
 	Address(std::string ipArg, uint16 portArg);
 	Address(const Address& addr);
 
 	virtual ~Address();
 
+	// IP地址(网络字节序)
 	uint32	ip;
+	// 端口号
 	uint16	port;
 
+	// 获取点分字符串ip地址, X.X.X.X:port
 	int writeToString(char * str, int length) const;
 
+	// 重载类型转换操作符，char*
 	operator char*() const { return this->c_str(); }
 
+	// 获取点分字符串ip地址, X.X.X.X:port
+	// (使用自己的s_stringBuf缓存)
 	char * c_str() const;
+
 	const char * ipAsString() const;
 	bool isNone() const	{ return this->ip == 0; }
 
@@ -53,8 +64,15 @@ public:
 	static int ip2string(u_int32_t address, char * string);
 
 private:
+
+	// 2个临时的字符串buff
+	// （防止重复分配内存）
 	static char s_stringBuf[2][32];
+
+	// 当前指向的s_stringBuf
 	static int s_currStringBuf;
+
+	// 循环获取，下一个s_stringBuf
 	static char * nextStringBuf();
 };
 

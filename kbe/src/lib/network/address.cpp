@@ -8,6 +8,8 @@
 namespace KBEngine { 
 namespace Network
 {
+
+// 初始化，类中静态变量
 char Address::s_stringBuf[2][32] = {{0},{0}};
 
 int Address::s_currStringBuf = 0;
@@ -56,11 +58,16 @@ void Address::onReclaimObject()
 }
 
 //-------------------------------------------------------------------------------------
+
+// 初始化，字符串ip地址
 Address::Address(std::string ipArg, uint16 portArg):
 ip(0),
+
+// htons,htonl: host to net， 更改字节序
 port(htons(portArg))
 {
 	u_int32_t addr;
+	// 转换字符串ip
 	Network::Address::string2ip(ipArg.c_str(), addr);
 	ip = (uint32)addr;
 } 
@@ -79,6 +86,8 @@ Address::~Address()
 }
 
 //-------------------------------------------------------------------------------------
+
+// 获取点分字符串ip地址, X.X.X.X:port
 int Address::writeToString(char * str, int length) const
 {
 	uint32	hip = ntohl(ip);
@@ -86,7 +95,7 @@ int Address::writeToString(char * str, int length) const
 
 	return kbe_snprintf(str, length,
 		"%d.%d.%d.%d:%d",
-		(int)(uchar)(hip>>24),
+		(int)(uchar)(hip>>24),	// (又使用强转uchar，来丢弃高的字节)
 		(int)(uchar)(hip>>16),
 		(int)(uchar)(hip>>8),
 		(int)(uchar)(hip),
@@ -94,6 +103,9 @@ int Address::writeToString(char * str, int length) const
 }
 
 //-------------------------------------------------------------------------------------
+
+// 获取点分字符串ip地址, X.X.X.X:port
+// (使用自己的s_stringBuf缓存)
 char * Address::c_str() const
 {
 	char * buf = Address::nextStringBuf();
@@ -117,6 +129,7 @@ const char * Address::ipAsString() const
 }
 
 //-------------------------------------------------------------------------------------
+// 【静态函数】
 char * Address::nextStringBuf()
 {
 	s_currStringBuf = (s_currStringBuf + 1) % 2;
@@ -124,11 +137,14 @@ char * Address::nextStringBuf()
 }
 
 //-------------------------------------------------------------------------------------
+// 【静态函数】转换字符串ip/域名
 int Address::string2ip(const char * string, u_int32_t & address)
 {
 	u_int32_t	trial;
 
 #if KBE_PLATFORM == PLATFORM_UNIX
+	// inet_aton, inet_addr, inet_network, inet_ntoa, inet_makeaddr, inet_lnaof, inet_netof - Internet address manipulation routines
+	// Q: Unix/Linux/Windows 不同平台上网络API的差异？
 	if (inet_aton(string, (struct in_addr*)&trial) != 0)
 #else
 	if ((trial = inet_addr(string)) != INADDR_NONE)
@@ -138,6 +154,7 @@ int Address::string2ip(const char * string, u_int32_t & address)
 		return 0;
 	}
 
+	// 尝试转换域名
 	struct hostent * hosts = gethostbyname(string);
 	if (hosts != NULL)
 	{
@@ -149,12 +166,21 @@ int Address::string2ip(const char * string, u_int32_t & address)
 }
 
 //-------------------------------------------------------------------------------------
+// 【静态函数】将ip地址，转换成点分字符串ip
 int Address::ip2string(u_int32_t address, char * string)
 {
+	// 转换字节序
 	address = ntohl(address);
 
 	int p1, p2, p3, p4;
+
+	// 抹掉低三个字节
+	// 取到高第四个字节
 	p1 = address >> 24;
+
+	// 抹掉高第四个字节
+	// 再抹掉最后两个字节
+	// 取到高第3个字节
 	p2 = (address & 0xffffff) >> 16;
 	p3 = (address & 0xffff) >> 8;
 	p4 = (address & 0xff);
