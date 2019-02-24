@@ -74,10 +74,13 @@ bool Backuper::backup(Entity& entity, MemoryStream& s)
 }
 
 //-------------------------------------------------------------------------------------
+
+// 遍历所有enitty，获取设置了自动备份的entity列表
 void Backuper::createBackupTable()
 {
 	backupEntityIDs_.clear();
 
+	// 遍历所有entity
 	Entities<Entity>::ENTITYS_MAP::const_iterator iter = Baseapp::getSingleton().pEntities()->getEntities().begin();
 
 	for(; iter != Baseapp::getSingleton().pEntities()->getEntities().end(); ++iter)

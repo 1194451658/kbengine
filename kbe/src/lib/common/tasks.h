@@ -12,15 +12,24 @@ namespace KBEngine
 /**
  *	任务容器
  */
+
+// 就是使用vector存储任务
+// 批量调用process()
 class Tasks
 {
 public:
 	Tasks();
 	~Tasks();
 
+	// 添加task到vector
 	void add(Task * pTask);
+
+	// 从vector中移除task
 	bool cancel(Task * pTask);
+
+	// 遍历所有task，调用process()
 	void process();
+
 private:
 	
 	typedef std::vector<KBEngine::Task *> Container;

@@ -15,6 +15,9 @@
 
 namespace KBEngine{
 
+// 同archiver
+// 一段间隔内，备份所有设置了自动备份功能的entity
+// 每一个tick，只备份一段
 class Backuper
 {
 public:

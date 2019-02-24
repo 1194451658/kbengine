@@ -10,9 +10,13 @@
 namespace KBEngine { 
 
 //-------------------------------------------------------------------------------------
+// 返回 seconds * update频率
+// lowerBound：限制返回的最小值
 int32 secondsToTicks(float seconds, int lowerBound)
 {
-	return std::max(lowerBound, int(floorf(seconds * g_kbeSrvConfig.gameUpdateHertz() + 0.5f)));
+	return std::max(
+		lowerBound,
+		int(floorf(seconds * g_kbeSrvConfig.gameUpdateHertz() + 0.5f)));
 }
 
 //-------------------------------------------------------------------------------------

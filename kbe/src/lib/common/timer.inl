@@ -208,23 +208,34 @@ inline TimeBase::TimeBase(TimersBase & owner, TimerHandler * pHandler, void * pU
 	pUserData_(pUserData),
 	state_(TIME_PENDING)
 {
+	// TimerHandler被此TimerBase使用
+	// 增加其内部的计数
 	pHandler->incTimerRegisterCount();
 }
 
+// 进行Cancel
+// 设置状态CANCELLED
+// 通知TimerHandler，Timer被Cancel
+// 通知Timers，Timer被Cancel
 inline void TimeBase::cancel()
 {
+	// 如果已经取消，返回
 	if (this->isCancelled()){
 		return;
 	}
 
 	KBE_ASSERT((state_ == TIME_PENDING) || (state_ == TIME_EXECUTING));
+
+	// 设置状态
 	state_ = TIME_CANCELLED;
 
+	// 通知TimerHandler，解除同TimeBase的绑定
 	if (pHandler_){
 		pHandler_->release(TimerHandle(this), pUserData_);
 		pHandler_ = NULL;
 	}
 
+	// Q: 这个是通知？
 	owner_.onCancel();
 }
 

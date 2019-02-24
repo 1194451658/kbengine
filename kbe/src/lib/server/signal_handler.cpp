@@ -80,6 +80,7 @@ SignalHandlers::~SignalHandlers()
 }
 
 //-------------------------------------------------------------------------------------
+// Q: 和App绑定？
 void SignalHandlers::attachApp(ServerApp* app)
 { 
 	papp_ = app; 
@@ -175,8 +176,10 @@ bool SignalHandlers::process()
 	*/
 #endif
 
+	// 这里rpos_是0
 	while (rpos_ < wpos_)
 	{
+		//  当前从signalledArray_中获取的singal id?
 		int sigNum = signalledArray_[rpos_++];
 
 #if KBE_PLATFORM != PLATFORM_WIN32
@@ -184,6 +187,8 @@ bool SignalHandlers::process()
 		//	continue;
 #endif
 
+		// 从singnalHandlerMap中找到
+		// 对signal的监听SignalHandler
 		SignalHandlerMap::iterator iter1 = singnalHandlerMap_.find(sigNum);
 		if (iter1 == singnalHandlerMap_.end())
 		{

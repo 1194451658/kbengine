@@ -17,6 +17,12 @@ public:
 	virtual void onSignalled(int sigNum) = 0;
 };
 
+// Task: 只定义一个process()虚函数
+// 单例
+// 用来监听从某个ServerApp发出的signal，缓存在signalledArray_中
+// 在process()函数中，会对signalledArray_中的消息进行处理
+// 注：ServerApp就继承自SignalHandler !!!
+// Q: 对于一个signal，只有一个Handler?
 class SignalHandlers : public Singleton<SignalHandlers>, public Task
 {
 public:
@@ -36,6 +42,8 @@ public:
 	
 	virtual bool process();
 
+	// Q: 和App绑定？
+	// 接收从App发送出来的signale?
 	void attachApp(ServerApp* app);
 
 	ServerApp* getApp(){ return papp_; }
@@ -46,6 +54,10 @@ private:
 	
 	ServerApp* papp_;
 	uint8 rpos_, wpos_;
+
+
+	// onSignalled()的传入，会被缓存在这里
+	// process()的时候，会遍历这里进行处理
 	int signalledArray_[256];
 
 };

@@ -11,6 +11,9 @@ namespace KBEngine
 /**
  *	抽象一个任务
  */
+
+// 只定义一个process()虚函数
+
 class Task
 {
 public:

@@ -15,6 +15,10 @@
 
 namespace KBEngine{
 
+// 每过periodInTicks，一段时间，遍历所有，设置了自动保存的entity
+// 将要保存的所有entity，分割成periodInTicks段
+// 并且在periodInTicks间的每个tick，保存选取的那段entity到数据库
+
 class Archiver
 {
 public:

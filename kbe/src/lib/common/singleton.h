@@ -20,6 +20,7 @@
 
 namespace KBEngine{
 	
+// 类的单列模板
 template <typename T> 
 class Singleton
 {
